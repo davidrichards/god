@@ -1,0 +1,9 @@
+== My Goals
+
+I branched God to be able to address a few things:
+
+* Better, more consistent logging
+* Better documentation on watches, conditions and transitions
+* Deal with daemonization issues
+* Deal with memory issues
+
