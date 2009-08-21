@@ -72,11 +72,14 @@ module God
       
       # send to regular logger
       self.send(level, text % [])
-      
+    
+      require 'rubygems'
+      require 'ruby-debug'
+      debugger
       # send to syslog
       Syslog.send(SYSLOG_EQUIVALENTS[level], text) if Logger.syslog
     end
-    
+        
     # Get all log output for a given Watch since a certain Time.
     #   +watch_name+ is the String name of the Watch
     #   +since+ is the Time since which to fetch log lines
