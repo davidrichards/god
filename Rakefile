@@ -12,7 +12,7 @@ begin
     gem.homepage = "http://god.rubyforge.org/"
     gem.authors = ["Tom Preston-Werner"]
     gem.require_paths = ["lib", "ext"]
-    gem.files.include("ext")
+    gem.files.include?("ext")
     gem.extensions << 'ext/god/extconf.rb'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

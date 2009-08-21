@@ -154,6 +154,43 @@ module God
   DRB_ALLOW_DEFAULT = ['127.0.0.1']
   LOG_LEVEL_DEFAULT = :info
   
+  
+  class LogLevel
+    class << self
+
+      LEVELS = {
+        :debug => Logger::DEBUG, 
+        :info => Logger::INFO,
+        :warn => Logger::WARN, 
+        :error => Logger::ERROR, 
+        :fatal => Logger::FATAL
+      }.freeze
+      
+      LABELS = {
+        Logger::DEBUG => :debug, 
+        Logger::INFO => :info, 
+        Logger::WARN => :warn, 
+        Logger::ERROR => :error, 
+        Logger::FATAL => :fatal
+      }.freeze
+      
+      def for(v)
+        v.is_a?(Numeric) ? LABELS[v] : LEVELS[v]
+      end
+      
+      # Handles the confusion between all the levels being thrown around.
+      # Example: LogLevel.permit?(4, self.level)
+      # Example: LogLevel.permit?(:info, self.level)
+      def permit?(options)
+        level = options[:level]
+        threshold = options[:threshold]
+        numeric_level = level.is_a?(Numeric) ? level : self.for(level)
+        numeric_threshold = threshold.is_a?(Numeric) ? threshold : self.for(threshold)
+        numeric_level >= numeric_threshold
+      end
+    end
+  end
+  
   class << self
     # user configurable
     safe_attr_accessor :pid,
@@ -211,6 +248,7 @@ module God
     
     # additional setup
     self.setup
+    
     
     # log level
     log_level_map = {:debug => Logger::DEBUG,
