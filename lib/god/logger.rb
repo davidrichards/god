@@ -6,7 +6,7 @@ module God
                           :warn => :debug,
                           :info => :debug,
                           :debug => :debug}
-    
+
     attr_accessor :logs
     
     class << self
@@ -69,15 +69,16 @@ module God
           self.logs[watch.name] << [Time.now, @templogio.string.dup]
         end
       end
-      
+
       # send to regular logger
       self.send(level, text % [])
-    
-      require 'rubygems'
-      require 'ruby-debug'
-      debugger
-      # send to syslog
-      Syslog.send(SYSLOG_EQUIVALENTS[level], text) if Logger.syslog
+      
+      # Make sure this message warrants a message
+      # LogLevel just helps me keep track of numbers/labels
+      if Logger.syslog and LogLevel.permit?(:level => level, :threshold => self.level)
+        # send to syslog
+        Syslog.send(SYSLOG_EQUIVALENTS[level], text) 
+      end
     end
         
     # Get all log output for a given Watch since a certain Time.
